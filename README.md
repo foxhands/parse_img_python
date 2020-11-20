@@ -1,4 +1,4 @@
-# parse_img_python
+# Спарсить изображения с сайта при помощи Python
 
 Для примера взял сайт http://www.motorpage.ru
 
