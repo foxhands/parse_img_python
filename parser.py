@@ -7,16 +7,15 @@ headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.
 url = "http://www.motorpage.ru/select-auto/by-mark.html"
 req = requests.get(url, headers)
 soup = BeautifulSoup(req.content, 'html.parser')
-#Ищем все изображения
-variable = soup.find_all('img')
+variable = soup.find_all('img') #Ищем все изображения
 for tag in variable:
-  print(tag.get('alt'))
-  img_src = tag.get('src')
+  hooks = '' # иногда может понадобится, по умолчанию пустое
+  img_src = tag.get('src') # ссылка на картинку
+  img_name =  tag.get('alt').replace(' ', '-') # имя картинки
+  img_path = './img/' # путь к картинке (не забудь создать папку)
+  img_file = '.jpg' # разширение файла
   try:
-        # Скачиваем файл в папку img
-        urllib.request.urlretrieve(img_src, './img/' + tag.get('alt') + '.jpg')
-        # Сообщаем что все хорошо
-        print('Файл сохранился: ' + img_src, './img/' + tag.get('alt') + '.jpg')
+        urllib.request.urlretrieve( hooks + img_src, img_path + img_name + img_file)         # Скачиваем файл в папку img
+        print('Файл сохранился: ' +  img_name + img_file)         # Сообщаем что все хорошо
   except:
-        # Сообщаем что все плохо
-        print('Не получилось сохранить файл')
+        print('Не получилось сохранить файл '+ img_src, img_path + img_name + img_file)        # Сообщаем что все плохо
