@@ -2,6 +2,7 @@
 
 ![Total Downloads](https://img.shields.io/github/downloads/foxhands/parse_img_python/total)
 
+
 Для примера взял сайт http://www.motorpage.ru
 
 Задача: Загрузить изображения марок машин в формате марка.jpg 
@@ -9,3 +10,7 @@
 
 Можно пробывать любой другой сайт, все что нужно поменять это
 7 строка url = "любой сайт"
+
+
+
+![Followers](https://img.shields.io/github/followers/foxhands?style=for-the-badge)
