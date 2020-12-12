@@ -1,6 +1,6 @@
 # Спарсить изображения с сайта при помощи Python
 
-[![Total Downloads](https://img.shields.io/github/downloads/foxhands/parse_img_python/total)]
+[!Total Downloads(https://img.shields.io/github/downloads/foxhands/parse_img_python/total)]
 Для примера взял сайт http://www.motorpage.ru
 
 Задача: Загрузить изображения марок машин в формате марка.jpg 
