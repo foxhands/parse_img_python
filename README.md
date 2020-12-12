@@ -13,4 +13,4 @@
 
 
 
-![Followers](https://img.shields.io/github/followers/foxhands?style=for-the-badge)
+![Followers](https://img.shields.io/github/followers/foxhands?style=for-the-badge) || ![Forks](https://img.shields.io/github/forks/foxhands/parse_img_python?style=for-the-badge) || ![Stars](https://img.shields.io/github/stars/foxhands/parse_img_python?style=for-the-badge)
