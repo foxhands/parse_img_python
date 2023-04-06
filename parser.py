@@ -3,33 +3,41 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def download_images(url, output_dir):
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'}
-
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-
-    soup = BeautifulSoup(response.content, 'html.parser')
-    img_tags = soup.find_all('img')
-    for i, img_tag in enumerate(img_tags):
-        img_url = img_tag.get('src')
-        alt_text = img_tag.get('alt', str(i))
-        filename = f"{alt_text.replace(' ', '-')}.jpg"
-        filepath = os.path.join(output_dir, filename)
-
-        response = requests.get(img_url, headers=headers)
-        response.raise_for_status()
-
-        with open(filepath, 'wb') as f:
-            f.write(response.content)
-
-        print(f"File saved: {filename}")
+def download_image(url, img_name):
+    """
+    Функция загрузки изображения по ссылке и сохранения его с заданным именем.
+    """
+    response = requests.get(url)
+    filename = os.path.join("images", f"{img_name}.jpg")
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+    print(f"Image saved: {filename}")
 
 
-if __name__ == '__main__':
-    url = 'https://www.motorpage.ru/select-auto/by-mark.html'
-    output_dir = './img'
-    download_images(url, output_dir)
+url = "http://www.motorpage.ru/select-auto/by-mark.html"
+response = requests.get(url)
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# создаем папку для сохранения изображений, если ее еще нет
+os.makedirs("images", exist_ok=True)
+
+# получаем все теги img
+img_tags = soup.find_all('img')
+
+for img_tag in img_tags:
+    # получаем ссылку на изображение и имя марки автомобиля
+    img_url = img_tag.get('src')
+    img_name = img_tag.get('alt')
+
+    # пропускаем изображения, у которых нет альтернативного текста или ссылки на изображение
+    if not img_name or not img_url:
+        continue
+
+    # получаем расширение файла
+    ext = os.path.splitext(img_url)[1]
+
+    # загружаем изображение только если расширение соответствует изображению
+    if ext.lower() not in ['.jpg', '.jpeg', '.png', '.gif']:
+        continue
+
+    download_image(img_url, img_name)
