@@ -1,21 +1,35 @@
+import os
 import requests
 from bs4 import BeautifulSoup
-import urllib.request
 
-headers = requests.utils.default_headers()
-headers.update({ 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'})
-url = "http://www.motorpage.ru/select-auto/by-mark.html"
-req = requests.get(url, headers)
-soup = BeautifulSoup(req.content, 'html.parser')
-variable = soup.find_all('img') #Ищем все изображения
-for tag in variable:
-  hooks = '' # иногда может понадобится, по умолчанию пустое
-  img_src = tag.get('src') # ссылка на картинку
-  img_name =  tag.get('alt').replace(' ', '-') # имя картинки
-  img_path = './img/' # путь к картинке (не забудь создать папку)
-  img_file = '.jpg' # разширение файла
-  try:
-        urllib.request.urlretrieve( hooks + img_src, img_path + img_name + img_file)         # Скачиваем файл в папку img
-        print('Файл сохранился: ' +  img_name + img_file)         # Сообщаем что все хорошо
-  except:
-        print('Не получилось сохранить файл '+ img_src, img_path + img_name + img_file)        # Сообщаем что все плохо
+
+def download_images(url, output_dir):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'}
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.content, 'html.parser')
+    img_tags = soup.find_all('img')
+    for i, img_tag in enumerate(img_tags):
+        img_url = img_tag.get('src')
+        alt_text = img_tag.get('alt', str(i))
+        filename = f"{alt_text.replace(' ', '-')}.jpg"
+        filepath = os.path.join(output_dir, filename)
+
+        response = requests.get(img_url, headers=headers)
+        response.raise_for_status()
+
+        with open(filepath, 'wb') as f:
+            f.write(response.content)
+
+        print(f"File saved: {filename}")
+
+
+if __name__ == '__main__':
+    url = 'https://www.motorpage.ru/select-auto/by-mark.html'
+    output_dir = './img'
+    download_images(url, output_dir)
